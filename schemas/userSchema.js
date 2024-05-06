@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new mongoose.Schema({
   password: {
@@ -7,13 +8,14 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    match: emailRegexp,
     required: [true, "Email is required"],
     unique: true,
   },
   subscription: {
     type: String,
-    enum: ["starter", "pro", "business"],
-    default: "starter",
+    enum: ["new User", "old User", "pro User"],
+    default: "new User",
   },
   token: {
     type: String,
@@ -22,14 +24,17 @@ const userSchema = new mongoose.Schema({
   avatarURL: {
     type: String,
   },
-  verify: {
-    type: Boolean,
-    default: false,
-  },
-  verificationToken: {
+  id: {
     type: String,
-    required: [true, "Verify token is required"],
   },
+  // verify: {
+  //   type: Boolean,
+  //   default: false,
+  // },
+  // verificationToken: {
+  //   type: String,
+  //   required: [true, "Verify token is required"],
+  // },
 });
 
 export default mongoose.model("User", userSchema);
